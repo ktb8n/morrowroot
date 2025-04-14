@@ -1,4 +1,6 @@
+// ArtGallery.js
 import React, { useState } from "react";
+import Filter from "./Filter";
 import ArtCard from "./ArtCard";
 import ArtDetailModal from "./ArtDetailModal";
 
@@ -6,6 +8,7 @@ export default function ArtGallery({ artworks }) {
 	const [selectedMediums, setSelectedMediums] = useState([]);
 	const [selectedYears, setSelectedYears] = useState([]);
 	const [selectedArt, setSelectedArt] = useState(null);
+	const [isFilterExpanded, setIsFilterExpanded] = useState(true);
 
 	if (!Array.isArray(artworks)) {
 		return <div style={{ color: "#fff" }}>Loading gallery...</div>;
@@ -47,61 +50,31 @@ export default function ArtGallery({ artworks }) {
 			}}
 		>
 			<div style={{ marginBottom: "0.5rem", color: "#ccc" }}>
-				Filter results:
+				<button
+					onClick={() => setIsFilterExpanded(!isFilterExpanded)}
+					style={{
+						padding: "0.25rem 0.5rem",
+						backgroundColor: "#555",
+						color: "#fff",
+						border: "none",
+						cursor: "pointer",
+					}}
+				>
+					{isFilterExpanded ? "Hide Filter" : "Show Filter"}
+				</button>
 			</div>
-			<div
-				style={{
-					borderTop: "1px solid #666",
-					borderBottom: "1px solid #666",
-					padding: "1rem 0",
-					marginBottom: "1rem",
-				}}
-			>
-				<div style={{ display: "flex", justifyContent: "space-between" }}>
-					<div>
-						{allMediums.map((medium) => (
-							<button
-								key={medium}
-								onClick={() => toggleMedium(medium)}
-								style={{
-									marginRight: "0.5rem",
-									padding: "0.25rem 0.5rem",
-									border: "1px solid white",
-									borderRadius: "4px",
-									backgroundColor: selectedMediums.includes(medium)
-										? "white"
-										: "#3a3a3a",
-									color: selectedMediums.includes(medium) ? "#000" : "#fff",
-									cursor: "pointer",
-								}}
-							>
-								{medium}
-							</button>
-						))}
-					</div>
-					<div>
-						{allYears.map((year) => (
-							<button
-								key={year}
-								onClick={() => toggleYear(year)}
-								style={{
-									marginLeft: "0.5rem",
-									padding: "0.25rem 0.5rem",
-									border: "1px solid white",
-									borderRadius: "4px",
-									backgroundColor: selectedYears.includes(year)
-										? "white"
-										: "#3a3a3a",
-									color: selectedYears.includes(year) ? "#000" : "#fff",
-									cursor: "pointer",
-								}}
-							>
-								{year}
-							</button>
-						))}
-					</div>
-				</div>
-			</div>
+
+			{isFilterExpanded && (
+				<Filter
+					allMediums={allMediums}
+					allYears={allYears}
+					selectedMediums={selectedMediums}
+					selectedYears={selectedYears}
+					toggleMedium={toggleMedium}
+					toggleYear={toggleYear}
+				/>
+			)}
+
 			<div className='gallery-flex'>
 				{filteredArtworks.map((art) => (
 					<ArtCard
@@ -111,6 +84,7 @@ export default function ArtGallery({ artworks }) {
 					/>
 				))}
 			</div>
+
 			{selectedArt && (
 				<ArtDetailModal
 					artwork={selectedArt}

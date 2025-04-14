@@ -1,7 +1,17 @@
 // App.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import {
+	BrowserRouter as Router,
+	Routes,
+	Route,
+	Link,
+	Navigate,
+} from "react-router-dom";
+
 import ArtGallery from "./components/ArtGallery";
 import ArtDetailModal from "./components/ArtDetailModal";
+import DevGallery from "./components/DevGallery";
+import CurriculumGallery from "./components/CurriculumGallery";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 
 import heronImage from "./assets/art/Ktb8n-Sample-Watercolor-Heron.JPG";
@@ -16,6 +26,18 @@ import sunny from "./assets/art/KtB8n_OilPaint_Sunny_2025.jpg";
 import blueJay from "./assets/art/KtB8n_Watercolor_BlueJay_2024.jpg";
 import chickadee from "./assets/art/KtB8n_Watercolor_Chickadee_2024.jpg";
 import hips from "./assets/art/KtB8n_Fiber_Hips_2012.jpg";
+import portrait1 from "./assets/Portrait01.png";
+import portrait2 from "./assets/Portrait02.png";
+import resumePDF from "./assets/KatherineBaetenResume.pdf";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+	faInstagram,
+	faGithub,
+	faLinkedin,
+	faBluesky,
+} from "@fortawesome/free-brands-svg-icons";
+
 
 export default function App() {
 	const [artworks, _setArtworks] = useLocalStorage("morrowroot-data", [
@@ -149,29 +171,114 @@ export default function App() {
 			image: hips,
 			description: "Fiber abstraction of hips.",
 			forsale: false,
-			available: false,
+			available: true,
 		},
 	]);
 
 	const [selectedArt, setSelectedArt] = useState(null);
 
+useEffect(() => {
+	const disableContextMenu = (e) => e.preventDefault();
+	document.addEventListener("contextmenu", disableContextMenu);
+	return () => document.removeEventListener("contextmenu", disableContextMenu);
+}, []);
+
 	return (
-		<div className='container'>
-			<header>
-				<h1>🎨 Morrowroot</h1>
-			</header>
-			<main>
-				<ArtGallery artworks={artworks} onSelect={setSelectedArt} />
-			</main>
-			<footer>
-				<small>&copy; {new Date().getFullYear()} Morrowroot Studio</small>
-			</footer>
-			{selectedArt && (
-				<ArtDetailModal
-					artwork={selectedArt}
-					onClose={() => setSelectedArt(null)}
-				/>
-			)}
-		</div>
+		<Router>
+			<div className='container'>
+				<header className='main-header'>
+					<div className='header-left'>
+						<div className='logo-image-container'>
+							<img
+								src={portrait1}
+								alt='Portrait 1'
+								className='logo-image primary'
+							/>
+							<img
+								src={portrait2}
+								alt='Portrait 2'
+								className='logo-image secondary'
+							/>
+						</div>
+
+						<div className='social-links'>
+							<a
+								href='https://www.linkedin.com/in/katiebaeten/'
+								className='social-link linkedin'
+								target='_blank'
+								rel='noreferrer'
+								aria-label='LinkedIn'
+							>
+								<FontAwesomeIcon icon={faLinkedin} size='lg' />
+							</a>
+							<a
+								href='https://github.com/ktb8n'
+								className='social-link github'
+								target='_blank'
+								rel='noreferrer'
+								aria-label='Github'
+							>
+								<FontAwesomeIcon icon={faGithub} size='lg' />
+							</a>
+							<a
+								href='https://instagram.com/ktb8n.art'
+								className='social-link instagram'
+								target='_blank'
+								rel='noreferrer'
+								aria-label='Instagram'
+							>
+								<FontAwesomeIcon icon={faInstagram} size='lg' />
+							</a>
+							<a
+								href='https://bsky.app/profile/ktb8n.bsky.social'
+								className='social-link bluesky'
+								target='_blank'
+								rel='noreferrer'
+								aria-label='Bluesky'
+							>
+								<FontAwesomeIcon icon={faBluesky} size='lg' />{" "}
+
+							</a>
+
+							<a
+								href={resumePDF}
+								target='_blank'
+								rel='noreferrer'
+								aria-label='CV'
+							>
+								CV
+							</a>
+						</div>
+					</div>
+
+					<nav className='header-nav'>
+						<Link to='/art'>Art</Link>
+						<Link to='/dev'>Engineering</Link>
+						<Link to='/curriculum'>Curriculum</Link>
+					</nav>
+				</header>
+
+				<main>
+					<Routes>
+						<Route path='/' element={<Navigate to='/art' />} />
+						<Route path='/art' element={<ArtGallery artworks={artworks} />} />
+						<Route path='/dev' element={<DevGallery />} />
+						<Route path='/curriculum' element={<CurriculumGallery />} />
+					</Routes>
+				</main>
+
+				<footer>
+					<small>&copy; {new Date().getFullYear()} Morrowroot Studio</small>
+				</footer>
+
+				{selectedArt && (
+					<ArtDetailModal
+						artwork={selectedArt}
+						onClose={() => setSelectedArt(null)}
+					/>
+				)}
+			</div>
+		</Router>
 	);
+  
 }
