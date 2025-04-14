@@ -1,11 +1,13 @@
 // App.jsx
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
 	BrowserRouter as Router,
 	Routes,
 	Route,
-	Link,
+	NavLink,
 	Navigate,
+	useLocation,
+	useNavigate,
 } from "react-router-dom";
 
 import ArtGallery from "./components/ArtGallery";
@@ -14,6 +16,7 @@ import DevGallery from "./components/DevGallery";
 import CurriculumGallery from "./components/CurriculumGallery";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 
+// Art asset imports
 import heronImage from "./assets/art/Ktb8n-Sample-Watercolor-Heron.JPG";
 import cavePointImage from "./assets/art/KtB8n_OilPaint_CavePointTamaracks_2024.jpg";
 import childsStillLife from "./assets/art/KtB8n_OilPaint_ChildsStillLife_2018.jpg";
@@ -26,6 +29,8 @@ import sunny from "./assets/art/KtB8n_OilPaint_Sunny_2025.jpg";
 import blueJay from "./assets/art/KtB8n_Watercolor_BlueJay_2024.jpg";
 import chickadee from "./assets/art/KtB8n_Watercolor_Chickadee_2024.jpg";
 import hips from "./assets/art/KtB8n_Fiber_Hips_2012.jpg";
+
+// Misc asset imports
 import portrait1 from "./assets/Portrait01.png";
 import portrait2 from "./assets/Portrait02.png";
 import resumePDF from "./assets/KatherineBaetenResume.pdf";
@@ -38,9 +43,9 @@ import {
 	faBluesky,
 } from "@fortawesome/free-brands-svg-icons";
 
-
-export default function App() {
-	const [artworks, _setArtworks] = useLocalStorage("morrowroot-data", [
+function AppContent() {
+	const [artworks] = useLocalStorage("morrowroot-data", [
+		// Full artwork objects
 		{
 			id: 1,
 			title: "Watercolor Heron",
@@ -175,110 +180,142 @@ export default function App() {
 		},
 	]);
 
-	const [selectedArt, setSelectedArt] = useState(null);
+	const location = useLocation();
+	const navigate = useNavigate();
 
-useEffect(() => {
-	const disableContextMenu = (e) => e.preventDefault();
-	document.addEventListener("contextmenu", disableContextMenu);
-	return () => document.removeEventListener("contextmenu", disableContextMenu);
-}, []);
+	// This grabs the artwork ID from the modal route like /art/4
+	const modalId = location.pathname.startsWith("/art/")
+		? parseInt(location.pathname.split("/art/")[1])
+		: null;
+
+	const selectedArt = artworks.find((art) => art.id === modalId);
+
+	useEffect(() => {
+		const disableContextMenu = (e) => e.preventDefault();
+		document.addEventListener("contextmenu", disableContextMenu);
+		return () =>
+			document.removeEventListener("contextmenu", disableContextMenu);
+	}, []);
 
 	return (
-		<Router>
-			<div className='container'>
-				<header className='main-header'>
-					<div className='header-left'>
-						<div className='logo-image-container'>
-							<img
-								src={portrait1}
-								alt='Portrait 1'
-								className='logo-image primary'
-							/>
-							<img
-								src={portrait2}
-								alt='Portrait 2'
-								className='logo-image secondary'
-							/>
-						</div>
-
-						<div className='social-links'>
-							<a
-								href='https://www.linkedin.com/in/katiebaeten/'
-								className='social-link linkedin'
-								target='_blank'
-								rel='noreferrer'
-								aria-label='LinkedIn'
-							>
-								<FontAwesomeIcon icon={faLinkedin} size='lg' />
-							</a>
-							<a
-								href='https://github.com/ktb8n'
-								className='social-link github'
-								target='_blank'
-								rel='noreferrer'
-								aria-label='Github'
-							>
-								<FontAwesomeIcon icon={faGithub} size='lg' />
-							</a>
-							<a
-								href='https://instagram.com/ktb8n.art'
-								className='social-link instagram'
-								target='_blank'
-								rel='noreferrer'
-								aria-label='Instagram'
-							>
-								<FontAwesomeIcon icon={faInstagram} size='lg' />
-							</a>
-							<a
-								href='https://bsky.app/profile/ktb8n.bsky.social'
-								className='social-link bluesky'
-								target='_blank'
-								rel='noreferrer'
-								aria-label='Bluesky'
-							>
-								<FontAwesomeIcon icon={faBluesky} size='lg' />{" "}
-
-							</a>
-
-							<a
-								href={resumePDF}
-								target='_blank'
-								rel='noreferrer'
-								aria-label='CV'
-							>
-								CV
-							</a>
-						</div>
+		<div className='container'>
+			{/* HEADER */}
+			<header className='main-header'>
+				<div className='header-left'>
+					<div className='logo-image-container'>
+						<img
+							src={portrait1}
+							alt='Portrait 1'
+							className='logo-image primary'
+						/>
+						<img
+							src={portrait2}
+							alt='Portrait 2'
+							className='logo-image secondary'
+						/>
 					</div>
 
-					<nav className='header-nav'>
-						<Link to='/art'>Art</Link>
-						<Link to='/dev'>Engineering</Link>
-						<Link to='/curriculum'>Curriculum</Link>
-					</nav>
-				</header>
+					<div className='social-links'>
+						<a
+							href='https://www.linkedin.com/in/katiebaeten/'
+							className='social-link linkedin'
+							target='_blank'
+							rel='noreferrer'
+							aria-label='LinkedIn'
+						>
+							<FontAwesomeIcon icon={faLinkedin} size='lg' />
+						</a>
+						<a
+							href='https://github.com/ktb8n'
+							className='social-link github'
+							target='_blank'
+							rel='noreferrer'
+							aria-label='Github'
+						>
+							<FontAwesomeIcon icon={faGithub} size='lg' />
+						</a>
+						<a
+							href='https://instagram.com/ktb8n.art'
+							className='social-link instagram'
+							target='_blank'
+							rel='noreferrer'
+							aria-label='Instagram'
+						>
+							<FontAwesomeIcon icon={faInstagram} size='lg' />
+						</a>
+						<a
+							href='https://bsky.app/profile/ktb8n.bsky.social'
+							className='social-link bluesky'
+							target='_blank'
+							rel='noreferrer'
+							aria-label='Bluesky'
+						>
+							<FontAwesomeIcon icon={faBluesky} size='lg' />
+						</a>
+						<a
+							href={resumePDF}
+							target='_blank'
+							rel='noreferrer'
+							aria-label='CV'
+						>
+							CV
+						</a>
+					</div>
+				</div>
 
-				<main>
-					<Routes>
-						<Route path='/' element={<Navigate to='/art' />} />
-						<Route path='/art' element={<ArtGallery artworks={artworks} />} />
-						<Route path='/dev' element={<DevGallery />} />
-						<Route path='/curriculum' element={<CurriculumGallery />} />
-					</Routes>
-				</main>
+				{/* Navigation with active link highlighting */}
+				<nav className='header-nav'>
+					<NavLink
+						to='/art'
+						className={({ isActive }) => (isActive ? "active" : "")}
+					>
+						Art
+					</NavLink>
+					<NavLink
+						to='/dev'
+						className={({ isActive }) => (isActive ? "active" : "")}
+					>
+						Engineering
+					</NavLink>
+					<NavLink
+						to='/curriculum'
+						className={({ isActive }) => (isActive ? "active" : "")}
+					>
+						Curriculum
+					</NavLink>
+				</nav>
+			</header>
 
-				<footer>
-					<small>&copy; {new Date().getFullYear()} Morrowroot Studio</small>
-				</footer>
+			{/* MAIN ROUTING */}
+			<main className='main'>
+				<Routes>
+					<Route path='/' element={<Navigate to='/art' />} />
+					<Route path='/art' element={<ArtGallery artworks={artworks} />} />
+					<Route path='/dev' element={<DevGallery />} />
+					<Route path='/curriculum' element={<CurriculumGallery />} />
+				</Routes>
+			</main>
 
-				{selectedArt && (
-					<ArtDetailModal
-						artwork={selectedArt}
-						onClose={() => setSelectedArt(null)}
-					/>
-				)}
-			</div>
+			{/* FOOTER */}
+			<footer>
+				<small>&copy; {new Date().getFullYear()} Morrowroot Studio</small>
+			</footer>
+
+			{/* ART MODAL ROUTING - only shows if /art/:id is active */}
+			{selectedArt && (
+				<ArtDetailModal
+					artwork={selectedArt}
+					onClose={() => navigate("/art")}
+				/>
+			)}
+		</div>
+	);
+}
+
+export default function App() {
+	return (
+		<Router>
+			<AppContent />
 		</Router>
 	);
-  
 }
