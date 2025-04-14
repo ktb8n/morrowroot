@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Special+Gothic+Condensed+One&display=swap');
 /* ====== Global Styles ====== */
 body {
 	font-family: 'Arial, sans-serif';
@@ -5,6 +6,29 @@ body {
 	margin: 0;
 	padding: 0;
 }
+
+.container {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+  padding: 1rem;
+}
+
+footer {
+  background-color: black;
+  color: gray;
+  display: flex;
+  justify-content: center; /* Centers content horizontally */
+  align-items: center; /* Centers content vertically (if the footer has height) */
+  height: 20px; /* Optional: Set a height if needed */
+  padding: 1rem; /* Optional: Adjust padding */
+  font-family: "Special Gothic Condensed One", sans-serif;
+}
+
 
 /* ====== Gallery Layout ====== */
 .gallery-flex {
@@ -45,22 +69,50 @@ body {
 
 /* ====== Header Layout ====== */
 .main-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-start;
-	padding: 1rem;
-	background-color: white;
-	position: sticky;
-	top: 0;
-	z-index: 1000;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between; /* Space out the left and right elements */
+  align-items: flex-end; /* Align everything to the bottom */
+  padding: 1rem;
+  background-color: black;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
+.header-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end; /* Align nav items to the bottom of the header */
+  gap: 1rem;
+  margin-left: auto;
+}
+
 
 .header-left {
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
+	align-items: center
 }
+
+
+.header-nav a {
+	color: #ccc;
+	text-decoration: none;
+	font-weight: 500;
+	transition: color 0.3s;
+	font-family: "Special Gothic Condensed One", sans-serif;
+  	font-weight: 400;
+  	font-style: normal;
+}
+
+.header-nav a.active {
+  border-bottom: 2px solid #333; /* highlight active */
+}
+
+/* .header-nav a:hover {
+	color: #fff;
+} */
 
 /* ====== Logo Swap Animation ====== */
 .logo-image-container {
@@ -108,7 +160,7 @@ body {
 }
 
 .social-links a {
-	color: black;
+	color: whitesmoke;
 	text-decoration: none;
 	font-size: 0.9rem;
 }
@@ -118,12 +170,7 @@ body {
 }
 
 /* ====== Navigation Links (Right Side) ====== */
-.header-nav {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 0.5rem;
-}
+
 
 .header-nav a {
 	color: lightgray;
