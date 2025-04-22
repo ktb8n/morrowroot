@@ -89,7 +89,7 @@ button {
   top: 0;
   bottom: 0;
   width: 3px;
-  background: red;
+  background: white;
   z-index: 1;
   transition: left 1s linear;
   pointer-events: none;
@@ -130,19 +130,19 @@ button {
 }
 
 .time-remaining.focus {
-  color: green;
+  color: #4caf50;
 }
 
 .time-remaining.break {
-  color: blue;
+  color: #03a9f4;
 }
 
 .time-remaining.prep {
-  color: gray;
+  color: #999;
 }
 
 .time-remaining.wrap {
-  color: orange;
+  color: #ff9800;
 }
 
 .phase-label {
