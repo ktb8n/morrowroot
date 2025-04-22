@@ -1,6 +1,7 @@
 //import React, { useState } from "react";
 import MovingEyes from "./movingEyes/MovingEyes";
 import portrait from "../assets/dev/SofonisbaAnguissola.png";
+import ProductivityTimer from "./productivityTimer/ProductivityTimer";
 
 export default function DevDetailModal({ project, onClose }) {
 	const handleBackdropClick = (e) => {
@@ -69,6 +70,8 @@ export default function DevDetailModal({ project, onClose }) {
 				>
 					{project.id === "dev1" ? (
 						<MovingEyes portrait={portrait} />
+					) : project.id === "dev2" ? (
+						<ProductivityTimer />
 					) : (
 						<img
 							src={project.image}
