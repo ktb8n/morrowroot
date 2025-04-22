@@ -9,6 +9,7 @@ export default function ArtGallery({ artworks }) {
 	const [selectedYears, setSelectedYears] = useState([]);
 	const [selectedArt, setSelectedArt] = useState(null);
 	const [isFilterExpanded, setIsFilterExpanded] = useState(true);
+	
 
 	if (!Array.isArray(artworks)) {
 		return <div style={{ color: "#fff" }}>Loading gallery...</div>;
